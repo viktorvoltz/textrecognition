@@ -9,28 +9,32 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  File pickedImage;
+  XFile pickedImage;
   bool fill = false;
   bool check = false;
   String text;
+  ImagePicker imagepicker = ImagePicker();
 
   Future pickImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      pickedImage = image;
-      fill = true;
-    });
+    var image = await imagepicker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        pickedImage = image;
+        fill = true;
+      });
+    }
+    return;
   }
 
   Future readImage() async {
-    FirebaseVisionImage image = FirebaseVisionImage.fromFile(pickedImage);
+    FirebaseVisionImage image = FirebaseVisionImage.fromFilePath(pickedImage.path);
     TextRecognizer recognizeText = FirebaseVision.instance.textRecognizer();
     VisionText readText = await recognizeText.processImage(image);
 
     for (TextBlock block in readText.blocks) {
       for (TextLine line in block.lines) {
         for (TextElement word in line.elements) {
+          print(word.text);
           String texttt = word.text;
           setState(() {
             text = texttt;
@@ -56,7 +60,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     height: 300,
                     width: 300,
                     decoration: BoxDecoration(
-                        image: DecorationImage(image: FileImage(pickedImage))),
+                        image: DecorationImage(image: FileImage(File(pickedImage.path)))),
                   )
                 : Container(),
             RaisedButton(
