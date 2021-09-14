@@ -63,11 +63,11 @@ class _FirstScreenState extends State<FirstScreen> {
                         image: DecorationImage(image: FileImage(File(pickedImage.path)))),
                   )
                 : Container(),
-            RaisedButton(
+            ElevatedButton(
               onPressed: pickImage,
               child: Text('pick image'),
             ),
-            RaisedButton(
+            ElevatedButton(
               onPressed: readImage,
               child: Text('read image'),
             ),
