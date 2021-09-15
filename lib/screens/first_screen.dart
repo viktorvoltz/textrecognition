@@ -13,6 +13,7 @@ class _FirstScreenState extends State<FirstScreen> {
   bool fill = false;
   bool check = false;
   String text;
+  List<String> textBlock = [];
   ImagePicker imagepicker = ImagePicker();
 
   Future pickImage() async {
@@ -27,7 +28,8 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Future readImage() async {
-    FirebaseVisionImage image = FirebaseVisionImage.fromFilePath(pickedImage.path);
+    FirebaseVisionImage image =
+    FirebaseVisionImage.fromFilePath(pickedImage.path);
     TextRecognizer recognizeText = FirebaseVision.instance.textRecognizer();
     VisionText readText = await recognizeText.processImage(image);
 
@@ -35,9 +37,10 @@ class _FirstScreenState extends State<FirstScreen> {
       for (TextLine line in block.lines) {
         for (TextElement word in line.elements) {
           print(word.text);
-          String texttt = word.text;
+          //String texttt = word.text;
+          textBlock.add(word.text);
           setState(() {
-            text = texttt;
+            //text = texttt;
             check = true;
           });
         }
@@ -51,29 +54,42 @@ class _FirstScreenState extends State<FirstScreen> {
       appBar: AppBar(
         title: Text('Text recognition'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            fill
-                ? Container(
-                    height: 300,
-                    width: 300,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: FileImage(File(pickedImage.path)))),
-                  )
-                : Container(),
-            ElevatedButton(
-              onPressed: pickImage,
-              child: Text('pick image'),
+      body: ListView(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                fill
+                    ? Container(
+                        height: 300,
+                        width: 300,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(
+                              File(pickedImage.path),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                ElevatedButton(
+                  onPressed: pickImage,
+                  child: Text('pick image'),
+                ),
+                ElevatedButton(
+                  onPressed: readImage,
+                  child: Text('read image'),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: readImage,
-              child: Text('read image'),
-            ),
-            check ? Container(child: Text(text)) : Container(),
-          ],
-        ),
+          ),
+          check
+              ? Container(
+                  child: Text(textBlock.join(" ")),
+                )
+              : Container(),
+        ],
       ),
     );
   }
