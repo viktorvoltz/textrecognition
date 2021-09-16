@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -37,10 +38,8 @@ class _FirstScreenState extends State<FirstScreen> {
       for (TextLine line in block.lines) {
         for (TextElement word in line.elements) {
           print(word.text);
-          //String texttt = word.text;
           textBlock.add(word.text);
           setState(() {
-            //text = texttt;
             check = true;
           });
         }
@@ -54,6 +53,8 @@ class _FirstScreenState extends State<FirstScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Text recognition'),
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.deepPurple),
       ),
       body: ListView(
         children: [
