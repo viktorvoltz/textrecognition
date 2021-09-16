@@ -50,6 +50,7 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Text recognition'),
@@ -63,7 +64,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 fill
                     ? Container(
                         height: 300,
-                        width: 300,
+                        width: size.width,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: FileImage(
